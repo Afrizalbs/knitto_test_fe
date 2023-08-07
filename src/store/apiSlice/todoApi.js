@@ -16,14 +16,14 @@ export const todoApi = createApi({
       query: ({ pageStart = 0, pageSize = 10 }) =>
         `todos?_start=${pageStart}&_limit=${pageSize}`,
     }),
-    addTodos: builder.mutation({
-      query: (body) => ({
+    createTodos: builder.mutation({
+      query: (title) => ({
         url: `todos`,
         method: "POST",
-        body,
+        body: { title },
       }),
     }),
   }),
 });
 
-export const { useGetTodosQuery, useAddTodosMutation } = todoApi;
+export const { useGetTodosQuery, useCreateTodosMutation } = todoApi;

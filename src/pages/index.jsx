@@ -1,3 +1,4 @@
+import AddTodoForm from "@/components/AddTodoForm";
 import { useGetTodosQuery } from "@/store/apiSlice/todoApi";
 import { useState } from "react";
 
@@ -29,20 +30,28 @@ export default function Home() {
     error,
     isFetching,
     isError,
+    isLoading,
   } = useGetTodosQuery({
     pageStart: page,
     pageSize: pageSize,
   });
 
-  if (isFetching) return <div>Loading</div>;
+  if (isFetching || isLoading)
+    return (
+      <div className="bg-blue-300 flex justify-center items-center min-h-screen">
+        <h1 className="text-center font-bold text-lg animate-spin">
+          Loading....
+        </h1>
+      </div>
+    );
 
   if (isError) return <div>Oops, Error {error.status}</div>;
 
   if (todos.length < 1) return <div>No Todos today</div>;
 
   return (
-    <main className="max-w-7xl min-h-screen bg-blue-400 mx-auto">
-      <div className="flex  gap-4 flex-wrap justify-center  py-3">
+    <main className="max-w-7xl min-h-screen bg-blue-400 mx-auto py-10">
+      <div className="flex gap-4 flex-wrap justify-center">
         {todos.map((todo) => {
           return (
             <div key={todo.id} className="bg-blue-600 rounded-lg w-52 h-52">
@@ -65,7 +74,7 @@ export default function Home() {
           );
         })}
       </div>
-      <div className="flex gap-2 justify-center">
+      <div className="flex gap-2 justify-center pt-5">
         <button
           disabled={page < pageSize}
           className={`${
@@ -94,6 +103,7 @@ export default function Home() {
           ))}
         </select>
       </div>
+      <AddTodoForm />
     </main>
   );
 }
